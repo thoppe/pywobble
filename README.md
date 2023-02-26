@@ -1,6 +1,8 @@
 # pywobble
 _Python synthesizer for creating dubstep and trap sounds_
 
+![skull_logo](assets/Skull_CoverArt.jpg)
+
 
 ### Thoughts on the module from Chat-GPT:
 
