@@ -25,7 +25,9 @@ class ADSR(AudioFilter):
 
     def wave_function(self, Y, attack, decay, sustain, release, sustain_level):
 
-        envelope = self.get_envelope(attack, decay, sustain, release, sustain_level)
+        envelope = self.get_envelope(
+            attack, decay, sustain, release, sustain_level
+        )
 
         remaining_timestamps = len(Y) - len(envelope)
         envelope = np.pad(envelope, (0, remaining_timestamps))

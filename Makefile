@@ -10,9 +10,9 @@ package_name = pywobble
 #	xdg-open htmlcov/index.html
 
 lint:
-	black *.py
+	black *.py --line-length 80
 	flake8 *.py
-#	black $(package_name) tests setup.py --line-length 80
+#	black $(package_name) tests setup.py 
 #	flake8 $(package_name) tests
 
 #clean:
