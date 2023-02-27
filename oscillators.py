@@ -5,8 +5,8 @@ class Oscillator:
     def __init__(self, sampling_rate=44100):
         self.sampling_rate = sampling_rate
 
-    def __call__(self, T, frequency):
-        return self.wave_function(T, frequency).astype(np.float32)
+    def __call__(self, T, *args, **kwargs):
+        return self.wave_function(T, *args, **kwargs).astype(np.float32)
 
 
 class SineWave(Oscillator):

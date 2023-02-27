@@ -3,6 +3,12 @@ _Python synthesizer for creating dubstep and trap sounds_
 
 ![skull_logo](assets/Skull_CoverArt.jpg)
 
+Currently implemented:
+
++ Oscillators (Sine, Square, Triangle, Sawtooth)
++ Envelopes (Attack, Decay, Sustain, Release)
++ Noise (White, Blue, Violet, Pink, Brown)
+
 
 ### Thoughts on the module from Chat-GPT:
 
