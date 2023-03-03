@@ -1,3 +1,5 @@
+import pylab as plt
+from sound_helpers import play_sample
 import numpy as np
 from oscillators import SawToothWave
 from envelopes import ADSR
@@ -33,13 +35,9 @@ f = ADSR(fs)
 x0 = f(w0, 0.5, 0.25, 0.25, 0.25, 0.5, delay=0.10)
 x1 = f(w1, 0.25, 0.25, 0.0, 0.25, 0.25)
 
-import pylab as plt
-
 plt.plot(x0)
 plt.plot(x1)
 plt.show()
-
-from sound_helpers import play_sample
 
 # play_sample(x0)
 # play_sample(x1)
