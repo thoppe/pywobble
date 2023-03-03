@@ -26,12 +26,12 @@ play_sample(sample1)
 play_sample(sample0)
 """
 
-x0 = s(T, freq)
-x1 = s(T, freq / 8)
+w0 = s(T, freq)
+w1 = s(T, freq / 8)
 
 f = ADSR(fs)
-x0 = f(x0, 0.5, 0.25, 0.25, 0.25, 0.5)
-x1 = f(x1, 0.25, 0.25, 0.0, 0.25, 0.25)
+x0 = f(w0, 0.5, 0.25, 0.25, 0.25, 0.5, delay=0.10)
+x1 = f(w1, 0.25, 0.25, 0.0, 0.25, 0.25)
 
 import pylab as plt
 
@@ -41,6 +41,6 @@ plt.show()
 
 from sound_helpers import play_sample
 
-play_sample(x0)
-play_sample(x1)
+# play_sample(x0)
+# play_sample(x1)
 play_sample(x0 + x1)

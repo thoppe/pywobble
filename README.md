@@ -6,7 +6,7 @@ _Python synthesizer for creating dubstep and trap sounds_
 Currently implemented:
 
 + Oscillators (Sine, Square, Triangle, Sawtooth)
-+ Envelopes (Attack, Decay, Sustain, Release)
++ Envelopes (Attack, Decay, Sustain, Release, delay)
 + Noise (White, Blue, Violet, Pink, Brown)
 
 
