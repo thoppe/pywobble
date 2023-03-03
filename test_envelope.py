@@ -1,14 +1,14 @@
-import pylab as plt
-from sound_helpers import play_sample
 import numpy as np
 from oscillators import SawToothWave
 from envelopes import ADSR
+
+# from sound_helpers import play_sample
+# import pylab as plt
 
 fs = 44100  # sampling rate, Hz, must be integer
 duration = 1.50  # in seconds, may be float
 freq = 440.0  # sine frequency, Hz, may be float
 
-T = np.arange(fs * duration)
 s = SawToothWave()
 f = ADSR()
 
@@ -28,11 +28,16 @@ play_sample(sample1)
 play_sample(sample0)
 """
 
-w0 = s(T, freq)
-w1 = s(T, freq / 8)
+w0 = s(duration, freq)
+w1 = s(duration, freq / 8)
 
 f = ADSR(fs)
-x0 = f(w0, 0.5, 0.25, 0.25, 0.25, 0.5, delay=0.10)
+x0 = f(w0, [0.5, 0.25, 0.25, 0.25, 0.5, 0.10])
+
+print(x0)
+exit()
+
+
 x1 = f(w1, 0.25, 0.25, 0.0, 0.25, 0.25)
 
 plt.plot(x0)

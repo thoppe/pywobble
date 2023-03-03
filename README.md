@@ -12,10 +12,11 @@ _Python synthesizer for creating dubstep and trap sounds_
 ## To do:
 
 + Interpolate oscillators
++ Phase shift oscillators
 + Proper library
 + Proper test suite
 + Move from numpy to torch for differentiable
-
++ Notes to freq helper function
 
 ### Thoughts on the module from Chat-GPT:
 
