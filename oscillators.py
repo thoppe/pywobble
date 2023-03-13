@@ -1,41 +1,80 @@
-import math
+"""
+SawToothWave, SquareWave, and TriangleWave adapted from:
+
+https://pytorch.org/audio/main/tutorials/additive_synthesis_tutorial.html
+"""
+
 import torch
+from torchaudio.prototype.functional import oscillator_bank, extend_pitch
+
+PI = torch.pi
+PI2 = 2 * torch.pi
 
 
 class Oscillator:
-    def __init__(self, sampling_rate=44100):
-        self.sampling_rate = sampling_rate
+    def __init__(self, sample_rate=44100):
+        self.sample_rate = sample_rate
 
-    def __call__(self, duration, frequency, *args, **kwargs):
-        T = self.get_time(duration)
-        return self.wave_function(T, frequency, *args, **kwargs)
+    def ones(self, duration):
+        NUM_FRAMES = int(duration * self.sample_rate)
+        return torch.ones(NUM_FRAMES)
 
-    def get_time(self, duration):
-        return torch.arange(self.sampling_rate * duration)
-
-
-class SineWave(Oscillator):
-    def wave_function(self, T, frequency):
-        X = (2 * math.pi * T * frequency) / self.sampling_rate
-        Y = torch.sin(X)
-        return Y
-
-
-class SquareWave(SineWave):
-    def wave_function(self, T, frequency):
-        Y = SineWave.wave_function(self, T, frequency)
-        return torch.sign(Y)
+    def __call__(
+        self,
+        duration,
+        frequency,
+    ):
+        freq = self.get_frequency_response(duration, frequency)
+        amp = self.get_amplitude_response(duration, frequency)
+        return oscillator_bank(freq, amp, sample_rate=self.sample_rate)
 
 
-class TriangleWave(Oscillator):
-    def wave_function(self, T, frequency):
-        p = 1 / frequency * self.sampling_rate
-        Y = 4 / p * torch.abs((((T - p / 4) % p + p) % p - p / 2)) - 1
-        return Y
+class SimpleOscillator(Oscillator):
+    def get_frequency_response(self, t, f):
+        f0 = f * self.ones(t)[:, None]
+        return extend_pitch(f0, self.freq_mult(f))
+
+    def get_amplitude_response(self, t, f):
+        amp = self.ones(t)[:, None]
+        return extend_pitch(amp, self.amp_mult(f))
 
 
-class SawToothWave(Oscillator):
-    def wave_function(self, T, frequency):
-        p = 1 / frequency * self.sampling_rate
-        Y = 2 * (T / p - torch.floor(T / p + 0.5))
-        return Y
+class SineWave(SimpleOscillator):
+    def freq_mult(self, f):
+        return 1
+
+    def amp_mult(self, f):
+        return 1
+
+
+class SawToothWave(SimpleOscillator):
+    def freq_mult(self, f):
+        num_pitch = int(self.sample_rate / f)
+        return num_pitch
+
+    def amp_mult(self, f):
+        num_pitch = int(self.sample_rate / f)
+        return [-((-1) ** i) / (PI * i) for i in range(1, 1 + num_pitch)]
+
+
+class SquareWave(SimpleOscillator):
+    def freq_mult(self, f):
+        num_pitch = int(self.sample_rate / f / 2)
+        return [2.0 * i + 1.0 for i in range(num_pitch)]
+
+    def amp_mult(self, f):
+        num_pitch = int(self.sample_rate / f / 2)
+        return [4 / (PI * (2.0 * i + 1.0)) for i in range(num_pitch)]
+
+
+class TriangleWave(SimpleOscillator):
+    def freq_mult(self, f):
+        num_pitch = int(self.sample_rate / f / 2)
+        return [2.0 * i + 1.0 for i in range(num_pitch)]
+
+    def amp_mult(self, f):
+        num_pitch = int(self.sample_rate / f / 2)
+        c = 8 / (PI**2)
+        return [
+            c * ((-1) ** i) / ((2.0 * i + 1.0) ** 2) for i in range(num_pitch)
+        ]
