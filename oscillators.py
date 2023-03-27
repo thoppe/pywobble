@@ -19,6 +19,9 @@ class Oscillator:
         NUM_FRAMES = int(duration * self.sample_rate)
         return torch.ones(NUM_FRAMES)
 
+    def get_time(self, duration):
+        return torch.arange(self.sample_rate * duration)
+
     def __call__(
         self,
         duration,
@@ -54,7 +57,7 @@ class SawToothWave(SimpleOscillator):
 
     def amp_mult(self, f):
         num_pitch = int(self.sample_rate / f)
-        return [-((-1) ** i) / (PI * i) for i in range(1, 1 + num_pitch)]
+        return [2.0 * -((-1) ** i) / (PI * i) for i in range(1, 1 + num_pitch)]
 
 
 class SquareWave(SimpleOscillator):
@@ -64,7 +67,7 @@ class SquareWave(SimpleOscillator):
 
     def amp_mult(self, f):
         num_pitch = int(self.sample_rate / f / 2)
-        return [4 / (PI * (2.0 * i + 1.0)) for i in range(num_pitch)]
+        return [4.0 / (PI * (2.0 * i + 1.0)) for i in range(num_pitch)]
 
 
 class TriangleWave(SimpleOscillator):
